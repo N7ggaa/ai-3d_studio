@@ -1,0 +1,14 @@
+{
+  "name": "Prompt2Roblox",
+  "tree": {
+    "$className": "Folder",
+    "Prompt2Roblox": {
+      "$className": "Script",
+      "$path": "Prompt2Roblox.lua"
+    },
+    "Widget": {
+      "$className": "ModuleScript",
+      "$path": "Widget.lua"
+    }
+  }
+}

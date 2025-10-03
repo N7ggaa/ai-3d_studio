@@ -1,0 +1,25 @@
+{
+  "name": "prompt2roblox-plugin",
+  "tree": {
+    "$className": "Folder",
+    "Prompt2Roblox": {
+      "$className": "Script",
+      "$path": "Prompt2Roblox.lua"
+    },
+    "Widget": {
+      "$className": "ModuleScript",
+      "$path": "Widget.lua"
+    }
+  },
+  "servePort": 8000,
+  "partitions": {
+    "game": {
+      "path": "game",
+      "target": "game"
+    },
+    "plugin": {
+      "path": "plugin",
+      "target": "plugin"
+    }
+  }
+}

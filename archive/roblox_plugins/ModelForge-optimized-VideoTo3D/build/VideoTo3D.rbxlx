@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
+  <Meta name="ExplicitAutoJoints">true</Meta>
+  <External>null</External>
+  <External>nil</External>
+  <Item class="PluginActionService">
+    <Properties>
+      <string name="Name">PluginActionService</string>
+    </Properties>
+  </Item>
+  <Item class="StarterPlayerScripts">
+    <Properties>
+      <string name="Name">StarterPlayerScripts</string>
+    </Properties>
+  </Item>
+  <Item class="StarterCharacterScripts">
+    <Properties>
+      <string name="Name">StarterCharacterScripts</string>
+    </Properties>
+  </Item>
+  <Item class="StarterPlayer">
+    <Properties>
+      <string name="Name">StarterPlayer</string>
+    </Properties>
+  </Item>
+  <Item class="StarterGui">
+    <Properties>
+      <string name="Name">StarterGui</string>
+    </Properties>
+  </Item>
+  <Item class="StarterPack">
+    <Properties>
+      <string name="Name">StarterPack</string>
+    </Properties>
+  </Item>
+  <Item class="StarterPlayerScripts">
+    <Properties>
+      <string name="Name">StarterPlayerScripts</string>
+    </Properties>
+  </Item>
+  <Item class="StarterCharacterScripts">
+    <Properties>
+      <string name="Name">StarterCharacterScripts</string>
+    </Properties>
+  </Item>
+  <Item class="StarterPlayer">
+    <Properties>
+      <string name="Name">StarterPlayer</string>
+    </Properties>
+  </Item>
+  <Item class="StarterGui">
+    <Properties>
+      <string name="Name">StarterGui</string>
+    </Properties>
+  </Item>
+  <Item class="StarterPack">
+    <Properties>
+      <string name="Name">StarterPack</string>
+    </Properties>
+  </Item>
+  <Item class="Plugin">
+    <Properties>
+      <string name="Name">VideoTo3D</string>
+      <string name="Source">
+-- Main plugin script
+local Plugin = script.Parent
+local Main = require(script.Parent.Main)
+
+local function init()
+    local success, result = pcall(function()
+        local main = Main.new(Plugin)
+        
+        -- Create toolbar
+        local toolbar = plugin:CreateToolbar("VideoTo3D")
+        local button = toolbar:CreateButton("VideoTo3D", "Convert video to 3D model", "rbxassetid://6031075926")
+        
+        local function toggle()
+            if main.isEnabled then
+                main:Disable()
+                button:SetActive(false)
+            else
+                main:Enable()
+                button:SetActive(true)
+            end
+        end
+        
+        button.Click:Connect(toggle)
+        
+        -- Clean up when plugin is unloaded
+        plugin.Unloading:Connect(function()
+            if main.isEnabled then
+                main:Disable()
+            end
+        end)
+        
+        return main
+    end)
+    
+    if not success then
+        warn("Failed to initialize VideoTo3D plugin:", result)
+        error(result)
+    end
+end
+
+return init()
+</string>
+    </Properties>
+  </Item>
+  <Item class="Script" referent="RBX1">
+    <Properties>
+      <string name="Name">Main</string>
+      <string name="Source">-- Main module for the VideoTo3D plugin
+
+local Plugin = script.Parent.Parent
+
+-- Services
+local HttpService = game:GetService("HttpService")
+local ContentProvider = game:GetService("ContentProvider")
+local RunService = game:GetService("RunService")
+local Selection = game:GetService("Selection")
+local TweenService = game:GetService("TweenService")
+
+-- Vendor
+local Roact = require(script.Parent.Vendor.Roact)
+local RoactRodux = require(script.Parent.Vendor.RoactRodux)
+local Flipper = require(script.Parent.Vendor.Flipper)
+
+-- Config
+local Config = require(script.Parent.Config)
+local Theme = require(script.Parent.Theme)
+
+-- Utils
+local Logger = require(script.Parent.Utils.Logger)
+local Utils = require(script.Parent.Utils.Utils)
+local Icons = require(script.Parent.Utils.Icons)
+local Path = require(script.Parent.Utils.Path)
+
+-- Services
+local VideoProcessor = require(script.Parent.Services.VideoProcessor)
+local NotificationService = require(script.Parent.Services.NotificationService)
+local AssetImporter = require(script.Parent.Services.AssetImporter)
+local YouTubeService = require(script.Parent.Services.YouTubeService)
+
+local Main = {}
+Main.__index = Main
+
+function Main.new(plugin)
+    local self = setmetatable({}, Main)
+    
+    self.plugin = plugin
+    self.isEnabled = false
+    self.widget = nil
+    
+    -- Initialize services
+    self.notificationService = NotificationService.new()
+    self.videoProcessor = VideoProcessor.new({
+        plugin = plugin,
+        notificationService = self.notificationService
+    })
+    
+    -- Initialize UI
+    self:initUI()
+    
+    return self
+end
+
+function Main:initUI()
+    -- This is a simplified version of the UI initialization
+    -- In a real implementation, you would use Roact to create the UI
+    
+    -- Create a simple button in the plugin toolbar
+    local toolbar = self.plugin:CreateToolbar("VideoTo3D")
+    local button = toolbar:CreateButton("VideoTo3D", "Convert video to 3D model", "rbxassetid://6031075926")
+    
+    button.Click:Connect(function()
+        if self.isEnabled then
+            self:Disable()
+            button:SetActive(false)
+        else
+            self:Enable()
+            button:SetActive(true)
+        end
+    end)
+end
+
+function Main:Enable()
+    if self.isEnabled then return end
+    
+    self.isEnabled = true
+    
+    -- Show a notification
+    self.notificationService:showNotification("VideoTo3D", "Plugin enabled. Click the button to start.", 5)
+    
+    -- Show the main widget if it exists
+    if self.widget then
+        self.widget.Enabled = true
+    end
+    
+    print("VideoTo3D plugin enabled")
+end
+
+function Main:Disable()
+    if not self.isEnabled then return end
+    
+    self.isEnabled = false
+    
+    -- Hide the widget if it exists
+    if self.widget then
+        self.widget.Enabled = false
+    end
+    
+    print("VideoTo3D plugin disabled")
+end
+
+-- Clean up resources when the plugin is unloaded
+function Main:destroy()
+    self:Disable()
+    
+    -- Clean up any remaining resources
+    if self.widget then
+        self.widget:Destroy()
+        self.widget = nil
+    end
+    
+    -- Clean up services
+    if self.videoProcessor then
+        self.videoProcessor:destroy()
+        self.videoProcessor = nil
+    end
+end
+
+return Main
+</string>
+    </Properties>
+  </Item>
+</roblox>

@@ -1,0 +1,17 @@
+[package]
+name = "model-forge/video-to-3d"
+version = "0.1.0"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+description = "Convert videos to 3D models in Roblox"
+authors = ["ModelForge"]
+license = "MIT"
+
+[dependencies]
+Roact = "^1.6.1"
+Rodux = "^4.0.1"
+Flipper = "^0.7.2"
+
+[dev-dependencies]
+RoactRodux = "^2.0.0"
+TestEZ = "^0.4.1"

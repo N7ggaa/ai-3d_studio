@@ -1,0 +1,32 @@
+{
+  "name": "industries-web",
+  "version": "1.0.0",
+  "description": "Professional website for Industries - AI Development Tools",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python -m http.server 8000",
+    "start": "python -m http.server 8000",
+    "build": "echo 'Static site - no build needed'",
+    "deploy": "echo 'Deploy to your hosting platform'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/industries-web.git"
+  },
+  "keywords": [
+    "ai",
+    "development",
+    "tools",
+    "3d",
+    "generation",
+    "website"
+  ],
+  "author": "Industries",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yourusername/industries-web/issues"
+  },
+  "homepage": "https://github.com/yourusername/industries-web#readme",
+  "devDependencies": {},
+  "dependencies": {}
+}

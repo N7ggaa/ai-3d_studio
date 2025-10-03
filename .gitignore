@@ -1,0 +1,30 @@
+# Node
+node_modules/
+ModelForge/dist/
+ModelForge/.vite/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+ModelForge-1/generated/
+ModelForge-1/uploads/
+ModelForge-1/instance/*.db*
+
+# OS/Editor
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+ModelForge-1/logs/
+
+# Binaries / Large assets
+*.fbx
+*.blend
+attached_assets/
+
+# Build outputs
+archive/**/dist/
+
+
