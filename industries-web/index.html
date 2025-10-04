@@ -3,203 +3,455 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Industries - AI Development Tools</title>
+    <title>ModelForge - AI-Powered 3D Model Generation</title>
+    <meta name="description" content="Download ModelForge - The ultimate AI-powered 3D model generator. Create stunning 3D models from text prompts, images, and YouTube videos. Supports OBJ, FBX, and Roblox integration.">
+    <meta name="keywords" content="3D model generator, AI 3D, text to 3D, YouTube to 3D, Roblox models, AI art, 3D printing, game assets">
+    <meta name="author" content="ModelForge">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://modelforge.dev/">
+    <meta property="og:title" content="ModelForge - AI-Powered 3D Model Generation">
+    <meta property="og:description" content="Create stunning 3D models from text prompts, images, and YouTube videos with AI. Perfect for game development, 3D printing, and creative projects.">
+    <meta property="og:image" content="https://modelforge.dev/assets/og-image.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://modelforge.dev/">
+    <meta property="twitter:title" content="ModelForge - AI-Powered 3D Model Generation">
+    <meta property="twitter:description" content="Create stunning 3D models from text prompts, images, and YouTube videos with AI.">
+    <meta property="twitter:image" content="https://modelforge.dev/assets/og-image.png">
+
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
+        :root {
+            --primary-gradient: linear-gradient(135deg, #4CAF50 0%, #2196F3 100%);
+            --secondary-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            --accent-gradient: linear-gradient(45deg, #FF6B6B, #FFE66D);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.125);
+            --text-primary: rgba(255, 255, 255, 0.95);
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --shadow-soft: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            --shadow-medium: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            --shadow-glow: 0 0 20px rgba(76, 175, 80, 0.3);
+        }
+
+        body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-            color: white;
+            color: var(--text-primary);
             line-height: 1.6;
             overflow-x: hidden;
+            min-height: 100vh;
         }
+
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 20px;
         }
+
+        /* Header Styles */
         .header {
             padding: 20px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid var(--glass-border);
             position: sticky;
             top: 0;
             background: rgba(15, 15, 35, 0.95);
             backdrop-filter: blur(20px);
             z-index: 100;
         }
+
         .nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
+
         .logo {
             font-size: 1.8rem;
             font-weight: 800;
-            background: linear-gradient(45deg, #4CAF50, #2196F3);
+            background: var(--primary-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--primary-gradient);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 18px;
+        }
+
         .nav-links {
             display: flex;
             gap: 30px;
             list-style: none;
         }
+
         .nav-links a {
-            color: white;
+            color: var(--text-primary);
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 6px;
         }
+
         .nav-links a:hover {
             color: #4CAF50;
+            background: var(--glass-bg);
         }
+        /* Hero Section */
         .hero {
             text-align: center;
-            padding: 100px 0;
+            padding: 120px 0 80px;
+            position: relative;
+            overflow: hidden;
         }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(76, 175, 80, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(33, 150, 243, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
         .hero h1 {
             font-size: 4rem;
             font-weight: 800;
-            margin-bottom: 20px;
-            background: linear-gradient(45deg, #4CAF50, #2196F3, #FF6B6B);
+            margin-bottom: 24px;
+            background: var(--primary-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            line-height: 1.1;
         }
+
         .hero p {
-            font-size: 1.3rem;
-            opacity: 0.8;
-            max-width: 600px;
-            margin: 0 auto 40px;
+            font-size: 1.4rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 48px;
+            line-height: 1.5;
         }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
         .cta-buttons {
             display: flex;
             gap: 20px;
             justify-content: center;
             flex-wrap: wrap;
+            margin-top: 40px;
         }
+
         .btn {
-            display: inline-block;
-            padding: 15px 30px;
-            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 32px;
+            border-radius: 12px;
             text-decoration: none;
             font-weight: 600;
             transition: all 0.3s ease;
             border: none;
             cursor: pointer;
             font-size: 16px;
-        }
-        .btn-primary {
-            background: linear-gradient(45deg, #4CAF50, #45a049);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(76, 175, 80, 0.4);
-        }
-        .btn-secondary {
-            background: transparent;
-            color: white;
-            border: 2px solid rgba(255,255,255,0.3);
-        }
-        .btn-secondary:hover {
-            background: rgba(255,255,255,0.1);
-            border-color: #4CAF50;
-        }
-        .projects-section {
-            padding: 100px 0;
-        }
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 60px;
-        }
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 40px;
-        }
-        .project-card {
-            background: rgba(255,255,255,0.05);
-            border-radius: 20px;
-            padding: 40px;
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
-        .project-card::before {
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: #4CAF50;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-primary);
+            border: 2px solid var(--glass-border);
+        }
+
+        .btn-outline:hover {
+            background: var(--glass-bg);
+            border-color: #4CAF50;
+            transform: translateY(-2px);
+        }
+        /* Features Section */
+        .features-section {
+            padding: 120px 0;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 80px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .feature-card {
+            background: var(--glass-bg);
+            border-radius: 24px;
+            padding: 40px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+        }
+
+        .feature-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(45deg, #4CAF50, #2196F3);
+            background: var(--primary-gradient);
         }
-        .project-card:hover {
-            transform: translateY(-10px);
+
+        .feature-card:hover {
+            transform: translateY(-12px);
             background: rgba(255,255,255,0.08);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            border-color: rgba(76, 175, 80, 0.3);
         }
-        .project-icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-gradient);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 24px;
+            position: relative;
         }
-        .project-title {
+
+        .feature-icon::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: var(--primary-gradient);
+            border-radius: 22px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feature-card:hover .feature-icon::after {
+            opacity: 0.3;
+        }
+
+        .feature-title {
             font-size: 1.5rem;
             font-weight: 700;
-            margin-bottom: 15px;
-            color: #4CAF50;
+            margin-bottom: 16px;
+            color: var(--text-primary);
         }
-        .project-description {
-            opacity: 0.8;
-            margin-bottom: 25px;
+
+        .feature-description {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
             line-height: 1.6;
         }
-        .project-features {
+
+        .feature-benefits {
             list-style: none;
-            margin-bottom: 30px;
+            margin-bottom: 0;
         }
-        .project-features li {
-            padding: 5px 0;
-            opacity: 0.9;
+
+        .feature-benefits li {
+            padding: 8px 0;
+            color: var(--text-secondary);
+            position: relative;
+            padding-left: 24px;
         }
-        .project-features li::before {
+
+        .feature-benefits li::before {
             content: '✓';
             color: #4CAF50;
             font-weight: bold;
-            margin-right: 10px;
-        }
-        .project-actions {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        .btn-small {
-            padding: 10px 20px;
-            font-size: 14px;
-        }
-        .coming-soon {
-            opacity: 0.6;
-            position: relative;
-        }
-        .coming-soon::after {
-            content: 'Coming Soon';
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: #FF6B6B;
+            left: 0;
+            top: 8px;
+        }
+
+        /* Screenshots Section */
+        .screenshots-section {
+            padding: 120px 0;
+        }
+
+        .screenshots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .screenshot-card {
+            background: var(--glass-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+
+        .screenshot-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .screenshot-image {
+            width: 100%;
+            height: 200px;
+            background: var(--glass-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .screenshot-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .screenshot-card:hover .screenshot-image img {
+            transform: scale(1.05);
+        }
+
+        .screenshot-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            padding: 20px;
             color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 12px;
+        }
+
+        .screenshot-title {
+            font-size: 1rem;
             font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .screenshot-description {
+            font-size: 0.8rem;
+            opacity: 0.8;
         }
         .footer {
             background: rgba(0,0,0,0.3);
@@ -247,168 +499,784 @@
             background: #4CAF50;
             transform: translateY(-2px);
         }
+        /* Download Section */
+        .download-section {
+            padding: 120px 0;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .download-card {
+            background: var(--glass-bg);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+            text-align: center;
+            backdrop-filter: blur(20px);
+        }
+
+        .download-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border-color: rgba(76, 175, 80, 0.3);
+        }
+
+        .download-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-gradient);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 20px;
+        }
+
+        .download-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .download-description {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .download-btn {
+            width: 100%;
+            padding: 16px 24px;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            margin-bottom: 16px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .download-meta {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Requirements Section */
+        .requirements-section {
+            padding: 120px 0;
+        }
+
+        .requirements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .requirement-item {
+            background: var(--glass-bg);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--glass-border);
+            text-align: center;
+        }
+
+        .requirement-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--accent-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin: 0 auto 16px;
+        }
+
+        .requirement-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .requirement-value {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(0,0,0,0.3);
+            padding: 80px 0 40px;
+            text-align: center;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-section a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: block;
+            padding: 4px 0;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: #4CAF50;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 40px 0;
+        }
+
+        .social-links a {
+            display: inline-block;
+            width: 44px;
+            height: 44px;
+            background: var(--glass-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            border: 1px solid var(--glass-border);
+        }
+
+        .social-links a:hover {
+            background: #4CAF50;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; }
-            .nav-links { display: none; }
-            .projects-grid { grid-template-columns: 1fr; }
-            .cta-buttons { flex-direction: column; align-items: center; }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .hero-stats {
+                gap: 30px;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 280px;
+            }
+
+            .section-title {
+                font-size: 2.2rem;
+            }
+
+            .screenshots-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .download-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                text-align: left;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                padding: 80px 0 60px;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .features-section,
+            .screenshots-section,
+            .download-section,
+            .requirements-section {
+                padding: 80px 0;
+            }
+
+            .feature-card,
+            .download-card {
+                padding: 30px 20px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .animate-pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Loading States */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid #4CAF50;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
         }
     </style>
 </head>
 <body>
+    <!-- Header -->
     <header class="header">
         <div class="container">
             <nav class="nav">
-                <div class="logo">Industries</div>
+                <div class="logo">
+                    <div class="logo-icon">3D</div>
+                    ModelForge
+                </div>
                 <ul class="nav-links">
-                    <li><a href="#projects">Projects</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#screenshots">Screenshots</a></li>
+                    <li><a href="#download">Download</a></li>
+                    <li><a href="#docs">Documentation</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
     <main>
+        <!-- Hero Section -->
         <section class="hero">
             <div class="container">
-                <h1>AI Development Tools</h1>
-                <p>Building the future of creative technology with cutting-edge AI tools for developers, designers, and creators.</p>
-                <div class="cta-buttons">
-                    <a href="#projects" class="btn btn-primary">Explore Projects</a>
-                    <a href="#contact" class="btn btn-secondary">Get in Touch</a>
+                <div class="animate-fade-in-up">
+                    <h1>AI-Powered 3D Model Generation</h1>
+                    <p>Transform text prompts, images, and videos into stunning 3D models with advanced AI. Perfect for game development, 3D printing, animations, and creative projects.</p>
+
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">10K+</div>
+                            <div class="stat-label">Models Generated</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">50+</div>
+                            <div class="stat-label">Export Formats</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">5min</div>
+                            <div class="stat-label">Average Generation</div>
+                        </div>
+                    </div>
+
+                    <div class="cta-buttons">
+                        <a href="#download" class="btn btn-primary">
+                            <i data-feather="download"></i>
+                            Download Now
+                        </a>
+                        <a href="#features" class="btn btn-secondary">
+                            <i data-feather="play"></i>
+                            Watch Demo
+                        </a>
+                        <a href="https://github.com/modelforge" class="btn btn-outline" target="_blank">
+                            <i data-feather="github"></i>
+                            View Source
+                        </a>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section id="projects" class="projects-section">
+        <!-- Features Section -->
+        <section id="features" class="features-section">
             <div class="container">
-                <h2 class="section-title">Active Projects</h2>
-                <div class="projects-grid">
-                    <div class="project-card">
-                        <div class="project-icon">🎨</div>
-                        <h3 class="project-title">AI3D Studio</h3>
-                        <p class="project-description">
-                            Professional 3D model generation from text prompts. Create stunning 3D assets in seconds with AI-powered technology.
+                <h2 class="section-title">Powerful AI Features</h2>
+                <p class="section-subtitle">Everything you need to create stunning 3D models with the power of artificial intelligence</p>
+
+                <div class="features-grid">
+                    <div class="feature-card animate-fade-in-up">
+                        <div class="feature-icon">🎨</div>
+                        <h3 class="feature-title">Text-to-3D Generation</h3>
+                        <p class="feature-description">
+                            Simply describe what you want to create in natural language, and watch as AI transforms your words into detailed 3D models.
                         </p>
-                        <ul class="project-features">
-                            <li>Text-to-3D generation</li>
-                            <li>Multiple export formats (OBJ, STL, PLY)</li>
-                            <li>Local processing for privacy</li>
-                            <li>Customizable complexity levels</li>
-                            <li>Professional quality output</li>
+                        <ul class="feature-benefits">
+                            <li>Natural language processing</li>
+                            <li>Multiple style options</li>
+                            <li>Real-time preview</li>
+                            <li>Customizable complexity</li>
                         </ul>
-                        <div class="project-actions">
-                            <a href="https://github.com/yourusername/ai3d-studio/releases/latest" class="btn btn-primary btn-small" onclick="downloadAI3D()">Try It (Download)</a>
-                            <a href="https://github.com/yourusername/ai3d-studio" class="btn btn-secondary btn-small" target="_blank">View Source</a>
+                    </div>
+
+                    <div class="feature-card animate-fade-in-up">
+                        <div class="feature-icon">🖼️</div>
+                        <h3 class="feature-title">Image-Guided Creation</h3>
+                        <p class="feature-description">
+                            Upload reference images to guide your 3D model generation. Perfect for recreating real-world objects or artistic concepts.
+                        </p>
+                        <ul class="feature-benefits">
+                            <li>Reference image upload</li>
+                            <li>Style transfer</li>
+                            <li>Multi-view generation</li>
+                            <li>Texture mapping</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card animate-fade-in-up">
+                        <div class="feature-icon">🎥</div>
+                        <h3 class="feature-title">YouTube to 3D</h3>
+                        <p class="feature-description">
+                            Convert YouTube videos into 3D models. Extract objects, scenes, and movements from any video content.
+                        </p>
+                        <ul class="feature-benefits">
+                            <li>Video frame extraction</li>
+                            <li>Motion tracking</li>
+                            <li>Scene reconstruction</li>
+                            <li>Animation support</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card animate-fade-in-up">
+                        <div class="feature-icon">🚀</div>
+                        <h3 class="feature-title">Roblox Integration</h3>
+                        <p class="feature-description">
+                            Seamlessly export your creations to Roblox Studio. Generate Lua scripts and upload assets directly to your games.
+                        </p>
+                        <ul class="feature-benefits">
+                            <li>Direct Roblox upload</li>
+                            <li>Script generation</li>
+                            <li>Asset optimization</li>
+                            <li>Studio integration</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card animate-fade-in-up">
+                        <div class="feature-icon">📦</div>
+                        <h3 class="feature-title">Multiple Export Formats</h3>
+                        <p class="feature-description">
+                            Export your models in industry-standard formats for use in any 3D software, game engine, or printing service.
+                        </p>
+                        <ul class="feature-benefits">
+                            <li>OBJ, FBX, STL formats</li>
+                            <li>Blender compatibility</li>
+                            <li>3D printing ready</li>
+                            <li>Game engine support</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card animate-fade-in-up">
+                        <div class="feature-icon">⚡</div>
+                        <h3 class="feature-title">Batch Processing</h3>
+                        <p class="feature-description">
+                            Generate multiple variations and process them in batches. Perfect for creating asset libraries and collections.
+                        </p>
+                        <ul class="feature-benefits">
+                            <li>Queue management</li>
+                            <li>Variation generation</li>
+                            <li>Progress tracking</li>
+                            <li>Smart caching</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Screenshots Section -->
+        <section id="screenshots" class="screenshots-section">
+            <div class="container">
+                <h2 class="section-title">See It In Action</h2>
+                <p class="section-subtitle">Real examples of 3D models created with ModelForge</p>
+
+                <div class="screenshots-grid">
+                    <div class="screenshot-card">
+                        <div class="screenshot-image">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23334155'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23D1D5DB' font-family='Arial' font-size='16'%3EModelForge Interface%3C/text%3E%3C/svg%3E" alt="ModelForge Interface" loading="lazy">
+                            <div class="screenshot-overlay">
+                                <div class="screenshot-title">Main Interface</div>
+                                <div class="screenshot-description">Clean, intuitive design for effortless 3D creation</div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="project-card coming-soon">
-                        <div class="project-icon">🖼️</div>
-                        <h3 class="project-title">AI Texture Generator</h3>
-                        <p class="project-description">
-                            Generate high-quality textures and materials for 3D models using advanced AI algorithms.
-                        </p>
-                        <ul class="project-features">
-                            <li>Procedural texture generation</li>
-                            <li>Style transfer capabilities</li>
-                            <li>4K resolution support</li>
-                            <li>Multiple material types</li>
-                        </ul>
-                        <div class="project-actions">
-                            <button class="btn btn-secondary btn-small" disabled>Coming Soon</button>
+                    <div class="screenshot-card">
+                        <div class="screenshot-image">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23334155'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23D1D5DB' font-family='Arial' font-size='16'%3EText-to-3D Generation%3C/text%3E%3C/svg%3E" alt="Text to 3D Generation" loading="lazy">
+                            <div class="screenshot-overlay">
+                                <div class="screenshot-title">Text-to-3D</div>
+                                <div class="screenshot-description">Transform words into detailed 3D models</div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="project-card coming-soon">
-                        <div class="project-icon">⚡</div>
-                        <h3 class="project-title">Smart Asset Pipeline</h3>
-                        <p class="project-description">
-                            Automated asset optimization and processing pipeline for game development and 3D projects.
-                        </p>
-                        <ul class="project-features">
-                            <li>Automatic LOD generation</li>
-                            <li>Asset compression</li>
-                            <li>Format conversion</li>
-                            <li>Batch processing</li>
-                        </ul>
-                        <div class="project-actions">
-                            <button class="btn btn-secondary btn-small" disabled>Coming Soon</button>
+                    <div class="screenshot-card">
+                        <div class="screenshot-image">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23334155'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23D1D5DB' font-family='Arial' font-size='16'%3ERoblox Integration%3C/text%3E%3C/svg%3E" alt="Roblox Integration" loading="lazy">
+                            <div class="screenshot-overlay">
+                                <div class="screenshot-title">Roblox Export</div>
+                                <div class="screenshot-description">Direct integration with Roblox Studio</div>
+                            </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Download Section -->
+        <section id="download" class="download-section">
+            <div class="container">
+                <h2 class="section-title">Download ModelForge</h2>
+                <p class="section-subtitle">Choose your platform and start creating amazing 3D models today</p>
+
+                <div class="download-grid">
+                    <div class="download-card">
+                        <div class="download-icon">🖥️</div>
+                        <h3 class="download-title">Desktop Application</h3>
+                        <p class="download-description">
+                            Full-featured desktop app with advanced AI capabilities and local processing for maximum privacy.
+                        </p>
+                        <a href="#" class="download-btn">Download for Windows</a>
+                        <div class="download-meta">Version 1.0.0 • 156 MB</div>
+                    </div>
+
+                    <div class="download-card">
+                        <div class="download-icon">🌐</div>
+                        <h3 class="download-title">Web Version</h3>
+                        <p class="download-description">
+                            Access ModelForge directly in your browser. No installation required, works on any device.
+                        </p>
+                        <a href="#" class="download-btn">Launch Web App</a>
+                        <div class="download-meta">Always up-to-date • Cloud processing</div>
+                    </div>
+
+                    <div class="download-card">
+                        <div class="download-icon">📱</div>
+                        <h3 class="download-title">Mobile Apps</h3>
+                        <p class="download-description">
+                            Create 3D models on the go with our mobile applications for iOS and Android devices.
+                        </p>
+                        <a href="#" class="download-btn">Coming Soon</a>
+                        <div class="download-meta">iOS & Android • Touch optimized</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Requirements Section -->
+        <section id="requirements" class="requirements-section">
+            <div class="container">
+                <h2 class="section-title">System Requirements</h2>
+                <p class="section-subtitle">Minimum specifications for optimal performance</p>
+
+                <div class="requirements-grid">
+                    <div class="requirement-item">
+                        <div class="requirement-icon">🖥️</div>
+                        <div class="requirement-title">Operating System</div>
+                        <div class="requirement-value">Windows 10+, macOS 10.15+, Linux</div>
+                    </div>
+
+                    <div class="requirement-item">
+                        <div class="requirement-icon">🧠</div>
+                        <div class="requirement-title">RAM</div>
+                        <div class="requirement-value">8GB minimum, 16GB recommended</div>
+                    </div>
+
+                    <div class="requirement-item">
+                        <div class="requirement-icon">💾</div>
+                        <div class="requirement-title">Storage</div>
+                        <div class="requirement-value">2GB free space + models</div>
+                    </div>
+
+                    <div class="requirement-item">
+                        <div class="requirement-icon">🎮</div>
+                        <div class="requirement-title">Graphics</div>
+                        <div class="requirement-value">OpenGL 3.3+ compatible GPU</div>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer id="contact" class="footer">
+    <!-- Footer -->
+    <footer id="docs" class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>Projects</h3>
-                    <p><a href="https://github.com/yourusername/ai3d-studio">AI3D Studio</a></p>
-                    <p><a href="#">AI Texture Generator</a></p>
-                    <p><a href="#">Smart Asset Pipeline</a></p>
+                    <h3>Product</h3>
+                    <a href="#features">Features</a>
+                    <a href="#download">Download</a>
+                    <a href="#requirements">Requirements</a>
+                    <a href="#screenshots">Screenshots</a>
                 </div>
                 <div class="footer-section">
-                    <h3>Resources</h3>
-                    <p><a href="#">Documentation</a></p>
-                    <p><a href="#">API Reference</a></p>
-                    <p><a href="#">Tutorials</a></p>
+                    <h3>Documentation</h3>
+                    <a href="https://github.com/modelforge/ModelForge/wiki/User-Guide" target="_blank">User Guide</a>
+                    <a href="https://github.com/modelforge/ModelForge/wiki/API-Reference" target="_blank">API Reference</a>
+                    <a href="https://github.com/modelforge/ModelForge/wiki/Tutorials" target="_blank">Tutorials</a>
+                    <a href="https://github.com/modelforge/ModelForge/wiki/FAQ" target="_blank">FAQ</a>
                 </div>
                 <div class="footer-section">
-                    <h3>Connect</h3>
-                    <p><a href="mailto:contact@industries.dev">contact@industries.dev</a></p>
-                    <p><a href="https://github.com/yourusername">GitHub</a></p>
-                    <p><a href="#">Twitter</a></p>
+                    <h3>Community</h3>
+                    <a href="https://github.com/modelforge" target="_blank">GitHub</a>
+                    <a href="https://discord.gg/modelforge" target="_blank">Discord</a>
+                    <a href="https://twitter.com/modelforge" target="_blank">Twitter</a>
+                    <a href="https://youtube.com/modelforge" target="_blank">YouTube</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <a href="mailto:support@modelforge.dev">Email Support</a>
+                    <a href="https://github.com/modelforge/ModelForge/issues" target="_blank">Contact Us</a>
+                    <a href="https://github.com/modelforge/ModelForge/blob/main/PRIVACY.md" target="_blank">Privacy Policy</a>
+                    <a href="https://github.com/modelforge/ModelForge/blob/main/TERMS.md" target="_blank">Terms of Service</a>
                 </div>
             </div>
+
             <div class="social-links">
-                <a href="https://github.com/yourusername" target="_blank">📱</a>
-                <a href="#" target="_blank">🐦</a>
-                <a href="#" target="_blank">💼</a>
+                <a href="https://github.com/modelforge" target="_blank" title="GitHub">
+                    <i data-feather="github"></i>
+                </a>
+                <a href="https://twitter.com/modelforge" target="_blank" title="Twitter">
+                    <i data-feather="twitter"></i>
+                </a>
+                <a href="https://discord.gg/modelforge" target="_blank" title="Discord">
+                    <i data-feather="message-circle"></i>
+                </a>
+                <a href="https://youtube.com/modelforge" target="_blank" title="YouTube">
+                    <i data-feather="youtube"></i>
+                </a>
             </div>
-            <p style="margin-top: 40px; opacity: 0.6;">
-                &copy; 2025 Industries. All rights reserved. Built with ❤️ for creators worldwide.
-            </p>
+
+            <div style="margin-top: 60px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1);">
+                <p style="opacity: 0.8; font-size: 1.1rem; margin-bottom: 20px;">
+                    &copy; 2025 ModelForge. All rights reserved.
+                </p>
+                <p style="opacity: 0.6; font-size: 0.9rem;">
+                    Built with ❤️ for creators worldwide. Empowering the next generation of 3D artists and developers.
+                </p>
+            </div>
         </div>
     </footer>
 
     <script>
-        function downloadAI3D() {
-            // In a real implementation, this would trigger the actual download
-            // For now, we'll show a message
-            alert('AI3D Studio download will be available from the GitHub releases page!');
-            
-            // You can replace this with actual download logic:
-            // window.open('https://github.com/yourusername/ai3d-studio/releases/latest', '_blank');
-        }
+        // Initialize Feather icons
+        document.addEventListener('DOMContentLoaded', function() {
+            feather.replace();
 
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Add intersection observer for animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-fade-in-up');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all feature cards and other animated elements
+            document.querySelectorAll('.feature-card, .screenshot-card, .download-card').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Add parallax effect to hero section
+            window.addEventListener('scroll', function() {
+                const scrolled = window.pageYOffset;
+                const hero = document.querySelector('.hero');
+                if (hero) {
+                    hero.style.transform = `translateY(${scrolled * 0.5}px)`;
                 }
             });
+
+            // Download functionality
+            window.downloadApp = function(platform) {
+                // In a real implementation, these would point to actual download URLs
+                const downloads = {
+                    'windows': 'https://github.com/modelforge/desktop/releases/latest/download/ModelForge-Setup-Windows.exe',
+                    'macos': 'https://github.com/modelforge/desktop/releases/latest/download/ModelForge-macOS.dmg',
+                    'linux': 'https://github.com/modelforge/desktop/releases/latest/download/ModelForge-Linux.AppImage',
+                    'web': '/app'
+                };
+
+                if (downloads[platform]) {
+                    if (platform === 'web') {
+                        window.open(downloads[platform], '_blank');
+                    } else {
+                        // Show loading state
+                        const btn = event.target;
+                        const originalText = btn.textContent;
+                        btn.textContent = 'Downloading...';
+                        btn.classList.add('loading');
+
+                        // Simulate download delay
+                        setTimeout(() => {
+                            window.open(downloads[platform], '_blank');
+                            btn.textContent = originalText;
+                            btn.classList.remove('loading');
+                        }, 1000);
+                    }
+                }
+            };
+
+            // Add hover effects for feature cards
+            document.querySelectorAll('.feature-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-12px) scale(1.02)';
+                });
+
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+
+            // Add click tracking for analytics (placeholder)
+            document.querySelectorAll('.btn-primary').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    console.log('Download button clicked');
+                    // Add analytics tracking here
+                });
+            });
+
+            // Mobile menu toggle (for future mobile menu implementation)
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    document.querySelector('.nav-links').classList.toggle('mobile-active');
+                });
+            }
+
+            // Add loading animation for download buttons
+            document.querySelectorAll('.download-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    if (this.textContent !== 'Coming Soon') {
+                        e.preventDefault();
+                        const platform = this.textContent.toLowerCase().includes('windows') ? 'windows' :
+                                       this.textContent.toLowerCase().includes('mac') ? 'macos' :
+                                       this.textContent.toLowerCase().includes('web') ? 'web' : 'linux';
+                        window.downloadApp(platform);
+                    }
+                });
+            });
         });
 
-        // Add some interactive effects
-        document.querySelectorAll('.project-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-10px) scale(1.02)';
+        // Performance optimization: Lazy load images
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.classList.remove('lazy');
+                        imageObserver.unobserve(img);
+                    }
+                });
             });
-            
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1)';
+
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                imageObserver.observe(img);
             });
-        });
+        }
     </script>
 </body>
 </html>

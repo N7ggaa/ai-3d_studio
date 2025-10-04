@@ -1,32 +1,45 @@
 {
-  "name": "industries-web",
+  "name": "modelforge-website",
   "version": "1.0.0",
-  "description": "Professional website for Industries - AI Development Tools",
+  "description": "Official website and download hub for ModelForge - AI-Powered 3D Model Generation",
   "main": "index.html",
   "scripts": {
     "dev": "python -m http.server 8000",
     "start": "python -m http.server 8000",
-    "build": "echo 'Static site - no build needed'",
-    "deploy": "echo 'Deploy to your hosting platform'"
+    "serve": "python -m http.server 8000",
+    "build": "echo 'Static site deployment ready'",
+    "preview": "python -m http.server 4000",
+    "deploy-netlify": "npm run build && netlify deploy --prod --dir=.",
+    "deploy-github": "npm run build && gh-pages -d .",
+    "test": "echo 'No tests defined yet'"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/industries-web.git"
+    "url": "https://github.com/modelforge/website.git"
   },
   "keywords": [
-    "ai",
-    "development",
-    "tools",
+    "modelforge",
     "3d",
-    "generation",
-    "website"
+    "ai",
+    "model-generation",
+    "text-to-3d",
+    "youtube-to-3d",
+    "roblox",
+    "game-development",
+    "3d-printing",
+    "artificial-intelligence"
   ],
-  "author": "Industries",
+  "author": "ModelForge Team",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/yourusername/industries-web/issues"
+    "url": "https://github.com/modelforge/website/issues"
   },
-  "homepage": "https://github.com/yourusername/industries-web#readme",
-  "devDependencies": {},
-  "dependencies": {}
+  "homepage": "https://modelforge.dev",
+  "devDependencies": {
+    "gh-pages": "^4.0.0"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  }
 }
