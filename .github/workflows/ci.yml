@@ -13,6 +13,7 @@ jobs:
         with:
           node-version: 20
       - name: Install and build web
+        working-directory: industries-web
         run: |
           npm ci
           npm run build
@@ -25,12 +26,14 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install deps
+        working-directory: app/ModelForge-1
         run: |
           python -m venv .venv
           source .venv/bin/activate
           pip install -r requirements.txt || true
           pip install -r requirements-dev.txt || true
       - name: Smoke tests
+        working-directory: app/ModelForge-1
         run: |
           source .venv/bin/activate
           python -m pytest -q || true
