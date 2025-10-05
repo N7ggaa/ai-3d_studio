@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}AI History & Favorites - AI Game Studio{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="h3 mb-4">
+            <i data-feather="clock" class="me-2"></i>
+            AI History & Favorites
+        </h1>
+
+        <!-- Search and Filter -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search by prompt...">
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" id="materialFilter">
+                            <option value="">All Materials</option>
+                            <option value="cartoon">Cartoon</option>
+                            <option value="realistic">Realistic</option>
+                            <option value="low-poly">Low-Poly</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" id="statusFilter">
+                            <option value="">All Status</option>
+                            <option value="completed">Completed</option>
+                            <option value="failed">Failed</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Grid -->
+        <div class="row" id="historyGrid">
+            {% for job in jobs %}
+            <div class="col-lg-4 col-md-6 mb-4 history-item">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span class="badge bg-{{ 'success' if job.status == 'completed' else 'danger' if job.status == 'failed' else 'warning' }}">
+                            {{ job.status.title() }}
+                        </span>
+                        <button class="btn btn-sm btn-outline-{{ 'warning' if job.is_favorite else 'secondary' }} favorite-btn" 
+                                data-job-id="{{ job.id }}">
+                            <i data-feather="{{ 'star' if job.is_favorite else 'star' }}"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="card-body">
+                        <h6 class="card-title">{{ job.prompt[:50] }}{% if job.prompt|length > 50 %}...{% endif %}</h6>
+                        <p class="card-text small text-muted">
+                            {{ job.created_at.strftime('%Y-%m-%d %H:%M') if job.created_at else 'Unknown' }}
+                        </p>
+                    </div>
+                    
+                    <div class="card-footer">
+                        {% if job.status == 'completed' %}
+                        <div class="btn-group w-100" role="group">
+                            <button class="btn btn-sm btn-primary download-btn" data-job-id="{{ job.id }}">
+                                <i data-feather="download" class="me-1"></i>
+                                Download
+                            </button>
+                            <button class="btn btn-sm btn-info variations-btn" data-job-id="{{ job.id }}">
+                                <i data-feather="copy" class="me-1"></i>
+                                Variations
+                            </button>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Favorite functionality
+    document.querySelectorAll('.favorite-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const jobId = this.dataset.jobId;
+            const isFavorite = this.classList.contains('btn-outline-warning');
+            
+            fetch('/api/favorites', {
+                method: isFavorite ? 'DELETE' : 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ job_id: jobId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    this.classList.toggle('btn-outline-warning');
+                    this.classList.toggle('btn-outline-secondary');
+                    showToast(data.message, 'success');
+                }
+            })
+            .catch(error => {
+                showToast('Error updating favorite', 'error');
+            });
+        });
+    });
+    
+    // Download functionality
+    document.querySelectorAll('.download-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const jobId = this.dataset.jobId;
+            window.open(`/download/${jobId}`, '_blank');
+        });
+    });
+    
+    feather.replace();
+});
+</script>
+{% endblock %}

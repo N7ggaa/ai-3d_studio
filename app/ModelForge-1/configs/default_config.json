@@ -1,0 +1,47 @@
+{
+  "lod_settings": {
+    "enabled": true,
+    "levels": [
+      {
+        "name": "LOD0",
+        "polygon_reduction": 0.0,
+        "max_vertices": 10000,
+        "max_triangles": 20000
+      },
+      {
+        "name": "LOD1",
+        "polygon_reduction": 0.5,
+        "max_vertices": 5000,
+        "max_triangles": 10000
+      },
+      {
+        "name": "LOD2",
+        "polygon_reduction": 0.8,
+        "max_vertices": 1000,
+        "max_triangles": 2000
+      }
+    ]
+  },
+  "ai_parameters": {
+    "model": "stabilityai/stable-diffusion-3d",
+    "max_retries": 3,
+    "timeout": 300,
+    "batch_size": 4
+  },
+  "file_paths": {
+    "output_dir": "outputs",
+    "temp_dir": "temp",
+    "cache_dir": "cache"
+  },
+  "performance": {
+    "max_workers": 4,
+    "chunk_size": 1024,
+    "use_gpu": true
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "plugin.log",
+    "max_size_mb": 10,
+    "backup_count": 5
+  }
+}

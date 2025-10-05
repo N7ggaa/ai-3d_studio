@@ -1,0 +1,286 @@
+{% extends "base.html" %}
+
+{% block title %}AI Pack Builder - AI Game Studio{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h3 mb-0">
+                <i data-feather="package" class="me-2"></i>
+                AI Pack Builder
+            </h1>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createPackModal">
+                <i data-feather="plus" class="me-2"></i>
+                Create New Pack
+            </button>
+        </div>
+
+        <!-- Pack Grid -->
+        <div class="row">
+            {% for pack in packs %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">{{ pack.name }}</h5>
+                        <span class="badge bg-{{ 'success' if pack.status == 'completed' else 'danger' if pack.status == 'failed' else 'warning' }}">
+                            {{ pack.status.title() }}
+                        </span>
+                    </div>
+                    
+                    <div class="card-body">
+                        <p class="card-text">{{ pack.description or 'No description' }}</p>
+                        
+                        <div class="mb-3">
+                            <span class="badge bg-info">{{ pack.theme }}</span>
+                            <span class="badge bg-secondary">{{ pack.asset_count }} assets</span>
+                        </div>
+                        
+                        <p class="card-text small text-muted">
+                            <i data-feather="calendar" class="me-1"></i>
+                            {{ pack.created_at.strftime('%Y-%m-%d %H:%M') if pack.created_at else 'Unknown' }}
+                        </p>
+                        
+                        {% if pack.status == 'completed' %}
+                        <div class="alert alert-success">
+                            <i data-feather="check-circle" class="me-2"></i>
+                            Pack ready for download!
+                        </div>
+                        {% elif pack.status == 'generating' %}
+                        <div class="alert alert-info">
+                            <i data-feather="loader" class="me-2"></i>
+                            Generating themed assets...
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="card-footer">
+                        {% if pack.status == 'completed' and pack.zip_path %}
+                        <button class="btn btn-success w-100 download-pack-btn" data-pack-id="{{ pack.id }}">
+                            <i data-feather="download" class="me-2"></i>
+                            Download Pack
+                        </button>
+                        {% elif pack.status == 'generating' %}
+                        <button class="btn btn-secondary w-100" disabled>
+                            <i data-feather="clock" class="me-2"></i>
+                            Generating...
+                        </button>
+                        {% else %}
+                        <button class="btn btn-secondary w-100" disabled>
+                            <i data-feather="x-circle" class="me-2"></i>
+                            Failed
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Empty State -->
+        {% if not packs %}
+        <div class="text-center py-5">
+            <i data-feather="package" style="width: 64px; height: 64px;" class="text-muted mb-3"></i>
+            <h4 class="text-muted">No packs yet</h4>
+            <p class="text-muted">Create your first themed pack to get started</p>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createPackModal">
+                <i data-feather="plus" class="me-2"></i>
+                Create Pack
+            </button>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Create Pack Modal -->
+<div class="modal fade" id="createPackModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create AI Pack</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="createPackForm">
+                    <div class="mb-3">
+                        <label for="packName" class="form-label">Pack Name</label>
+                        <input type="text" class="form-control" id="packName" required 
+                               placeholder="e.g., Medieval City Pack">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="packTheme" class="form-label">Theme</label>
+                        <select class="form-select" id="packTheme" required>
+                            <option value="">Select a theme</option>
+                            <option value="medieval">Medieval</option>
+                            <option value="sci-fi">Sci-Fi</option>
+                            <option value="fantasy">Fantasy</option>
+                            <option value="modern">Modern</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="packDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="packDescription" rows="3" 
+                                  placeholder="Describe your themed pack..."></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6>Theme Preview</h6>
+                        <div id="themePreview" class="border rounded p-3 bg-light">
+                            <p class="text-muted text-center">Select a theme to see what assets will be generated</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="generateVariations" checked>
+                            <label class="form-check-label" for="generateVariations">
+                                Generate variations for each asset
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="generateLOD" checked>
+                            <label class="form-check-label" for="generateLOD">
+                                Generate LOD levels
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="fixForRoblox" checked>
+                            <label class="form-check-label" for="fixForRoblox">
+                                Fix for Roblox integration
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="createPackBtn">
+                    <i data-feather="plus" class="me-2"></i>
+                    Create Pack
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Theme preview functionality
+    document.getElementById('packTheme').addEventListener('change', function() {
+        const theme = this.value;
+        const preview = document.getElementById('themePreview');
+        
+        const themeAssets = {
+            'medieval': [
+                'medieval castle tower',
+                'medieval house',
+                'medieval wall',
+                'medieval gate',
+                'medieval furniture',
+                'medieval weapons'
+            ],
+            'sci-fi': [
+                'futuristic spaceship',
+                'sci-fi laboratory',
+                'alien creature',
+                'futuristic weapon',
+                'space station',
+                'robot'
+            ],
+            'fantasy': [
+                'magical tree',
+                'dragon',
+                'wizard tower',
+                'magical portal',
+                'fantasy creature',
+                'enchanted weapon'
+            ],
+            'modern': [
+                'modern house',
+                'office building',
+                'modern car',
+                'furniture',
+                'electronics',
+                'modern weapon'
+            ]
+        };
+        
+        if (theme && themeAssets[theme]) {
+            preview.innerHTML = `
+                <h6 class="text-primary">${theme.charAt(0).toUpperCase() + theme.slice(1)} Theme Assets:</h6>
+                <ul class="list-unstyled mb-0">
+                    ${themeAssets[theme].map(asset => `<li><i data-feather="box" class="me-2"></i>${asset}</li>`).join('')}
+                </ul>
+            `;
+            feather.replace();
+        } else {
+            preview.innerHTML = '<p class="text-muted text-center">Select a theme to see what assets will be generated</p>';
+        }
+    });
+    
+    // Create pack functionality
+    document.getElementById('createPackBtn').addEventListener('click', function() {
+        const packName = document.getElementById('packName').value;
+        const packTheme = document.getElementById('packTheme').value;
+        const packDescription = document.getElementById('packDescription').value;
+        
+        if (!packName || !packTheme) {
+            showToast('Please fill in all required fields', 'warning');
+            return;
+        }
+        
+        this.disabled = true;
+        this.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Creating...';
+        
+        fetch('/api/packs', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: packName,
+                theme: packTheme,
+                description: packDescription,
+                generate_variations: document.getElementById('generateVariations').checked,
+                generate_lod: document.getElementById('generateLOD').checked,
+                fix_for_roblox: document.getElementById('fixForRoblox').checked
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.id) {
+                showToast('Pack created successfully!', 'success');
+                bootstrap.Modal.getInstance(document.getElementById('createPackModal')).hide();
+                setTimeout(() => location.reload(), 1000);
+            } else {
+                showToast(data.error || 'Error creating pack', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('Error creating pack', 'error');
+        })
+        .finally(() => {
+            this.disabled = false;
+            this.innerHTML = '<i data-feather="plus" class="me-2"></i>Create Pack';
+            feather.replace();
+        });
+    });
+    
+    // Download pack functionality
+    document.querySelectorAll('.download-pack-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const packId = this.dataset.packId;
+            window.open(`/api/packs/${packId}/download`, '_blank');
+        });
+    });
+    
+    // Initialize feather icons
+    feather.replace();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,274 @@
+{% extends "base.html" %}
+
+{% block title %}AI Game Studio - 3D Model Generator{% endblock %}
+
+{% block content %}
+{% block styles %}
+<style>
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .col-lg-9, .col-lg-3 {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+    .btn {
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+  }
+  body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+  .card {
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  .btn {
+    border-radius: 10px;
+    transition: all 0.3s ease;
+  }
+  .btn:hover {
+    transform: scale(1.05);
+  }
+</style>
+{% endblock %}
+<button id="autoExportBtn" class="btn btn-outline-warning">AI Auto-Export</button>
+<button id="aiMusicBtn" class="btn btn-outline-primary">AI Generate Music</button>
+<button id="stemSeparationBtn" class="btn btn-outline-secondary">Stem Separation</button>
+<button id="vocalEnhancementBtn" class="btn btn-outline-success">Vocal Enhancement</button>
+<button id="guidedSceneBtn" class="btn btn-outline-warning">AI Guided Scene</button>
+<button id="immersiveBtn" class="btn btn-outline-danger">Immersive Workspace</button>
+<button id="collaborativeBtn" class="btn btn-outline-info">Collaborative Edit</button>
+<button id="zbrushBtn" class="btn btn-outline-dark">Integrate ZBrush</button>
+<button id="substanceBtn" class="btn btn-outline-light">Integrate Substance</button>
+<button id="unityBtn" class="btn btn-outline-primary">Integrate Unity</button>
+<!-- Add in {% block content %}, after the tutorials section -->
+<button id="arBtn" class="btn btn-outline-danger">
+  <i data-feather="camera" class="me-1"></i>AR Preview
+</button>
+<div id="feedbackForm" class="mt-3 p-3 bg-light rounded">
+  <h6>Rate the App</h6>
+  <input type="range" id="rating" min="1" max="5" value="5" class="form-range" />
+  <small>1 (Poor) to 5 (Excellent)</small>
+  <textarea id="feedbackText" class="form-control mt-2" placeholder="Your feedback..."></textarea>
+  <button id="submitFeedbackBtn" class="btn btn-primary btn-sm mt-2">Submit</button>
+</div>
+<div class="container-fluid py-3">
+  <div class="row">
+    <!-- Project Explorer Panel -->
+    <div class="col-lg-3">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">
+            <i data-feather="folder" class="me-2"></i>
+            Project Explorer
+          </h5>
+        </div>
+        <div class="card-body p-0">
+          <div id="projectExplorer" class="tree-view" style="max-height: 400px; overflow-y: auto;">
+            <!-- Tree structure will be populated by JS -->
+            <div class="tree-item" data-type="folder" data-id="projects">
+              <i data-feather="folder" class="me-1"></i> Projects
+              <div class="tree-children">
+                <!-- Projects will be added here -->
+              </div>
+            </div>
+            <div class="tree-item" data-type="folder" data-id="models">
+              <i data-feather="folder" class="me-1"></i> Models
+              <div class="tree-children">
+                <!-- Models will be added here -->
+              </div>
+            </div>
+            <div class="tree-item" data-type="folder" data-id="assets">
+              <i data-feather="folder" class="me-1"></i> Assets
+              <div class="tree-children">
+                <!-- Assets will be added here -->
+              </div>
+            </div>
+          </div>
+          <div class="mt-2">
+            <input type="file" id="fileInput" multiple class="form-control form-control-sm" accept="image/*,video/*,.obj,.glb,.gltf,.stl,.ply">
+            <small class="text-muted">Drag files here or click to select</small>
+          </div>
+      </div>
+    </div>
+    <div id="timeline" style="display: none;">
+      <h5>Timeline</h5>
+      <input type="range" id="timeSlider" min="0" max="100" value="0" />
+      <button onclick="playAnimation()">Play</button>
+    </div>
+    <!-- Tutorials Section -->
+    <div class="card mt-3">
+      <div class="card-header">
+        <h5 class="card-title">Quick Tutorials</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-4">
+            <h6>Generate a Model</h6>
+            <p>Enter a prompt like "a red car" and click Generate. Watch the progress bar!</p>
+          </div>
+          <div class="col-md-4">
+            <h6>Export Your Work</h6>
+            <p>Click Export OBJ/GLB to download. Use Preview first to check.</p>
+          </div>
+          <div class="col-md-4">
+            <h6>Use Timeline</h6>
+            <p>Switch to Timeline tab and use the slider to animate your model.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-9">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                  <i data-feather="monitor" class="me-2"></i>
+                  3D Canvas
+                </h5>
+                <div class="d-flex gap-2">
+                  <select id="rendererMode" class="form-select form-select-sm">
+                    <option value="auto">Auto</option>
+                    <option value="webgl">WebGL</option>
+                    <option value="webgpu">WebGPU</option>
+                  </select>
+                  <button id="colabGpuBtn" class="btn btn-outline-primary btn-sm">
+                    <i data-feather="cpu" class="me-1"></i>Colab GPU
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div id="canvasContainer" style="height: 400px; position: relative;">
+                <!-- 3D Canvas will be inserted here by JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i data-feather="settings" class="me-2"></i>
+                Controls
+              </h5>
+            </div>
+            <div class="card-body">
+              <!-- Adaptive UI based on input type -->
+              <div id="promptMode" class="mode-panel">
+                <div class="mb-3">
+                  <label for="prompt" class="form-label">Text Prompt</label>
+                  <textarea id="prompt" class="form-control" rows="3" placeholder="Describe your 3D model (e.g., 'a futuristic spaceship')"></textarea>
+                </div>
+              </div>
+
+              <div id="imageMode" class="mode-panel" style="display: none;">
+                <div class="mb-3">
+                  <label for="imageInput" class="form-label">Image Input</label>
+                  <small class="text-muted">Upload an image to generate 3D from</small>
+                </div>
+              </div>
+
+              <div id="videoMode" class="mode-panel" style="display: none;">
+                <div class="mb-3">
+                  <label for="videoInput" class="form-label">Video Input</label>
+                  <input type="file" id="videoInput" class="form-control" accept="video/*" />
+                  <small class="text-muted">Upload a video to generate 3D from (uses Colab GPU)</small>
+                </div>
+                <button id="videoTo3DBtn" class="btn btn-outline-primary">Process Video</button>
+              </div>
+
+        <div class="row g-3 mt-1">
+          <div class="col-6">
+            <label for="materialPreset" class="form-label">Material Preset</label>
+            <select id="materialPreset" class="form-select">
+              <option value="default">Default</option>
+              <option value="realistic">Realistic</option>
+              <option value="stylized">Stylized</option>
+              <option value="lowpoly">Low Poly</option>
+            </select>
+          </div>
+          <div class="col-6">
+            <label for="toneMapping" class="form-label">Tone Mapping</label>
+            <select id="toneMapping" class="form-select">
+              <option value="default">Default</option>
+              <option value="realistic">Realistic</option>
+              <option value="stylized">Stylized</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row g-3 mt-1">
+          <div class="col-6">
+            <label for="hdriPreset" class="form-label">HDRI Preset</label>
+            <select id="hdriPreset" class="form-select">
+              <option value="none">None</option>
+              <option value="studio">Studio</option>
+              <option value="outdoor">Outdoor</option>
+              <option value="night">Night</option>
+            </select>
+          </div>
+          <div class="col-6 d-flex align-items-end">
+            <div class="form-check me-3">
+              <input class="form-check-input" type="checkbox" id="curvatureAO">
+              <label class="form-check-label" for="curvatureAO">Curvature/AO Shading</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-grid gap-2 mt-2">
+          <button id="generateBtn" class="btn btn-primary">
+            <i data-feather="play" class="me-1"></i>Generate
+          </button>
+          <button id="composeBtn" class="btn btn-outline-info">
+            <i data-feather="layers" class="me-1"></i>Compose Multi-Mesh
+          </button>
+          <button id="refineBtn" class="btn btn-success">
+            <i data-feather="settings" class="me-1"></i>Refine Locally
+          </button>
+          <button id="refineZipBtn" class="btn btn-outline-success">
+            <i data-feather="archive" class="me-1"></i>Refine & Zip
+          </button>
+          <button id="exportLodBtn" class="btn btn-outline-secondary">
+            <i data-feather="layers" class="me-1"></i>Export LOD
+          </button>
+          <button id="repairBtn" class="btn btn-outline-light">
+            <i data-feather="tool" class="me-1"></i>Repair Mesh
+          </button>
+          <div class="input-group">
+            <input type="file" id="refModelInput" class="form-control" accept=".obj,.glb,.gltf,.stl,.ply" />
+            <button id="addRefModelBtn" class="btn btn-outline-light">Add Reference Model</button>
+          </div>
+          <button id="exportObjBtn" class="btn btn-secondary">
+            <i data-feather="download" class="me-1"></i>Export OBJ
+          </button>
+          <button id="exportGlbBtn" class="btn btn-secondary">
+            <i data-feather="download" class="me-1"></i>Export GLB
+          </button>
+          <button id="exportStlBtn" class="btn btn-secondary">
+            <i data-feather="download" class="me-1"></i>Export STL
+          </button>
+          <button id="exportPlyBtn" class="btn btn-secondary">
+            <i data-feather="download" class="me-1"></i>Export PLY
+          </button>
+          <button id="aiSuggestBtn" class="btn btn-outline-info">
+            <i data-feather="lightbulb" class="me-1"></i>AI Suggest Prompt
+          </button>
+          <button id="aiAutoFixBtn" class="btn btn-outline-success">
+            <i data-feather="tool" class="me-1"></i>AI Auto-Fix
+          </button>
+          <button id="aiPreviewBtn" class="btn btn-outline-warning">
+            <i data-feather="eye" class="me-1"></i>AI Preview
+          </button>
+    </div>
+  </div>
+</div>
+
+{% block scripts %}
+  <script type="module" src="{{ url_for('static', filename='js/client_generate.js') }}"></script>
+{% endblock %}

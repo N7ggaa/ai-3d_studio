@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}YouTube to 3D Model Generator - ModelForge{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>YouTube to 3D Model Generator</h1>
+    <p class="lead">Convert YouTube videos into 3D models using AI</p>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <form id="youtubeForm" method="POST" action="{{ url_for('youtube_to_3d') }}">
+                        <div class="mb-3">
+                            <label for="youtubeUrl" class="form-label">YouTube Video URL</label>
+                            <input type="url" class="form-control" id="youtubeUrl" name="youtube_url" 
+                                   placeholder="https://www.youtube.com/watch?v=..." required>
+                            <div class="form-text">Enter the full URL of a YouTube video</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="prompt" class="form-label">Model Description (Optional)</label>
+                            <textarea class="form-control" id="prompt" name="prompt" rows="3"
+                                     placeholder="A 3D model of a spaceship with wings and engines"></textarea>
+                            <div class="form-text">Describe what 3D model you want to generate from the video</div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" id="generateBtn">
+                            <span id="buttonText">Generate 3D Model</span>
+                            <span id="spinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div id="result" class="mt-4 d-none">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Generated Model</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <div id="modelPreview" class="mb-3">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Generating your 3D model...</p>
+                        </div>
+                        <div id="downloadSection" class="d-none">
+                            <a href="#" id="downloadLink" class="btn btn-success">
+                                <i class="bi bi-download"></i> Download Model
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">How it works</h5>
+                </div>
+                <div class="card-body">
+                    <ol>
+                        <li>Paste a YouTube video URL</li>
+                        <li>Optionally describe the 3D model you want</li>
+                        <li>Click "Generate 3D Model"</li>
+                        <li>Wait for processing to complete</li>
+                        <li>Download your 3D model in FBX format</li>
+                    </ol>
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> 
+                        Processing may take a few minutes depending on video length and complexity.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('youtubeForm');
+    const button = document.getElementById('generateBtn');
+    const buttonText = document.getElementById('buttonText');
+    const spinner = document.getElementById('spinner');
+    const resultSection = document.getElementById('result');
+    const modelPreview = document.getElementById('modelPreview');
+    const downloadSection = document.getElementById('downloadSection');
+    const downloadLink = document.getElementById('downloadLink');
+    
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        // Show loading state
+        button.disabled = true;
+        buttonText.textContent = 'Generating...';
+        spinner.classList.remove('d-none');
+        
+        // Show result section
+        resultSection.classList.remove('d-none');
+        modelPreview.classList.remove('d-none');
+        downloadSection.classList.add('d-none');
+        
+        try {
+            const formData = new FormData(form);
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData
+            });
+            
+            const data = await response.json();
+            
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            
+            // Update UI with results
+            modelPreview.innerHTML = `
+                <div class="alert alert-success">
+                    <i class="bi bi-check-circle"></i> 
+                    Successfully generated 3D model!
+                </div>
+                <div class="text-muted">
+                    <p>Job ID: <code>${data.job_id}</code></p>
+                </div>
+            `;
+            
+            // Show download button
+            downloadLink.href = `/download/${data.job_id}`;
+            downloadSection.classList.remove('d-none');
+            
+        } catch (error) {
+            modelPreview.innerHTML = `
+                <div class="alert alert-danger">
+                    <i class="bi bi-exclamation-triangle"></i> 
+                    Error: ${error.message}
+                </div>
+            `;
+        } finally {
+            // Reset button state
+            button.disabled = false;
+            buttonText.textContent = 'Generate 3D Model';
+            spinner.classList.add('d-none');
+        }
+    });
+});
+</script>
+{% endblock %}

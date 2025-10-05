@@ -1,0 +1,392 @@
+{% extends "base.html" %}
+
+{% block title %}AI Co-pilot Chat - AI Game Studio{% endblock %}
+
+{% block content %}
+<div class="row h-100">
+    <div class="col-12">
+        <div class="card h-100 d-flex flex-column">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2 class="card-title mb-0">
+                        <i data-feather="message-circle" class="me-2"></i>
+                        AI Co-pilot Chat
+                    </h2>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-outline-secondary btn-sm" onclick="clearChat()">
+                            <i data-feather="trash-2" class="me-1"></i>
+                            Clear Chat
+                        </button>
+                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="toggleProjectContext()">
+                            <i data-feather="folder" class="me-1"></i>
+                            Project Context
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-body flex-grow-1 d-flex flex-column p-0">
+                <!-- Chat Messages -->
+                <div id="chatMessages" class="flex-grow-1 overflow-auto p-3" style="height: 400px;">
+                    <div class="text-center text-muted py-5">
+                        <i data-feather="cpu" style="width: 48px; height: 48px;" class="mb-3"></i>
+                        <h5>AI Co-pilot Ready</h5>
+                        <p>Ask me to create 3D models, scripts, environments, or manage your projects!</p>
+                        <div class="d-flex flex-wrap gap-2 justify-content-center mt-3">
+                            <button class="btn btn-sm btn-outline-primary" onclick="sendQuickMessage('Create a medieval sword')">
+                                Create a medieval sword
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary" onclick="sendQuickMessage('Generate a Lua script for NPC dialogue')">
+                                Generate Lua script
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary" onclick="sendQuickMessage('Create a new Roblox game project')">
+                                New Roblox project
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Typing Indicator -->
+                <div id="typingIndicator" class="px-3 pb-2" style="display: none;">
+                    <div class="d-flex align-items-center text-muted">
+                        <div class="spinner-border spinner-border-sm me-2" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <small>AI is thinking...</small>
+                    </div>
+                </div>
+                
+                <!-- Chat Input -->
+                <div class="border-top p-3">
+                    <form id="chatForm" onsubmit="sendMessage(event)">
+                        <div class="input-group">
+                            <input type="text" id="messageInput" class="form-control" 
+                                   placeholder="Ask me to create models, scripts, environments..." 
+                                   autocomplete="off" maxlength="1000">
+                            <button type="submit" class="btn btn-primary" id="sendButton">
+                                <i data-feather="send" class="me-1"></i>
+                                Send
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <!-- Quick Actions -->
+                    <div class="d-flex flex-wrap gap-2 mt-2">
+                        <small class="text-muted me-2">Quick actions:</small>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="sendQuickMessage('Show my projects')">
+                            <i data-feather="folder" class="me-1"></i>
+                            My Projects
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="sendQuickMessage('List my models')">
+                            <i data-feather="box" class="me-1"></i>
+                            My Models
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="sendQuickMessage('Help')">
+                            <i data-feather="help-circle" class="me-1"></i>
+                            Help
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Project Context Modal -->
+<div class="modal fade" id="projectContextModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Select Project Context</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted">Choose a project to provide context for the AI chat:</p>
+                <div id="projectList" class="list-group">
+                    <div class="text-center py-3">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let chatSessionId = null;
+let currentProjectId = null;
+
+// Initialize chat
+document.addEventListener('DOMContentLoaded', function() {
+    // Generate session ID
+    chatSessionId = 'chat_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    // Focus on input
+    document.getElementById('messageInput').focus();
+    
+    // Initialize feather icons
+    if (typeof feather !== 'undefined') {
+        feather.replace();
+    }
+});
+
+function sendMessage(event) {
+    event.preventDefault();
+    
+    const messageInput = document.getElementById('messageInput');
+    const message = messageInput.value.trim();
+    
+    if (!message) return;
+    
+    // Clear input and add user message
+    messageInput.value = '';
+    addMessage('user', message);
+    
+    // Show typing indicator
+    showTypingIndicator();
+    
+    // Send to backend
+    fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            message: message,
+            session_id: chatSessionId,
+            project_id: currentProjectId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        hideTypingIndicator();
+        
+        if (data.error) {
+            addMessage('system', 'Error: ' + data.error, 'danger');
+        } else {
+            addMessage('assistant', data.response);
+            
+            // Handle actions
+            if (data.actions && data.actions.length > 0) {
+                handleActions(data.actions);
+            }
+        }
+    })
+    .catch(error => {
+        hideTypingIndicator();
+        addMessage('system', 'Connection error. Please try again.', 'danger');
+        console.error('Chat error:', error);
+    });
+}
+
+function sendQuickMessage(message) {
+    document.getElementById('messageInput').value = message;
+    document.getElementById('chatForm').dispatchEvent(new Event('submit'));
+}
+
+function addMessage(type, content, variant = null) {
+    const messagesContainer = document.getElementById('chatMessages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'mb-3';
+    
+    let iconName, alignClass, bgClass;
+    
+    if (type === 'user') {
+        iconName = 'user';
+        alignClass = 'text-end';
+        bgClass = 'bg-primary text-white';
+    } else if (type === 'assistant') {
+        iconName = 'cpu';
+        alignClass = 'text-start';
+        bgClass = 'bg-light';
+    } else {
+        iconName = 'alert-circle';
+        alignClass = 'text-center';
+        bgClass = variant === 'danger' ? 'bg-danger text-white' : 'bg-warning';
+    }
+    
+    messageDiv.innerHTML = `
+        <div class="${alignClass}">
+            <div class="d-inline-block ${bgClass} rounded px-3 py-2 shadow-sm" style="max-width: 80%;">
+                <div class="d-flex align-items-start gap-2">
+                    <i data-feather="${iconName}" style="width: 16px; height: 16px; margin-top: 2px;"></i>
+                    <div style="white-space: pre-wrap;">${escapeHtml(content)}</div>
+                </div>
+            </div>
+            <small class="text-muted d-block mt-1">${new Date().toLocaleTimeString()}</small>
+        </div>
+    `;
+    
+    messagesContainer.appendChild(messageDiv);
+    
+    // Re-initialize feather icons
+    if (typeof feather !== 'undefined') {
+        feather.replace();
+    }
+    
+    // Scroll to bottom
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    
+    // Remove welcome message if it exists
+    const welcomeMsg = messagesContainer.querySelector('.text-center.text-muted.py-5');
+    if (welcomeMsg) {
+        welcomeMsg.remove();
+    }
+}
+
+function handleActions(actions) {
+    actions.forEach(action => {
+        if (action.type === 'generate_3d_model') {
+            addMessage('system', `Starting 3D model generation: ${action.params.prompt}`, 'info');
+            // Redirect to generation page or show progress
+            setTimeout(() => {
+                window.location.href = '/generate?prompt=' + encodeURIComponent(action.params.prompt);
+            }, 1000);
+        } else if (action.type === 'create_project') {
+            addMessage('system', `Creating new project: ${action.params.name}`, 'info');
+            // Handle project creation
+        } else if (action.type === 'generate_script') {
+            addMessage('system', `Generating ${action.params.script_type} script: ${action.params.prompt}`, 'info');
+            // Handle script generation
+        }
+    });
+}
+
+function showTypingIndicator() {
+    document.getElementById('typingIndicator').style.display = 'block';
+    document.getElementById('sendButton').disabled = true;
+    
+    // Scroll to bottom
+    const messagesContainer = document.getElementById('chatMessages');
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+function hideTypingIndicator() {
+    document.getElementById('typingIndicator').style.display = 'none';
+    document.getElementById('sendButton').disabled = false;
+}
+
+function clearChat() {
+    if (confirm('Are you sure you want to clear the chat history?')) {
+        const messagesContainer = document.getElementById('chatMessages');
+        messagesContainer.innerHTML = `
+            <div class="text-center text-muted py-5">
+                <i data-feather="cpu" style="width: 48px; height: 48px;" class="mb-3"></i>
+                <h5>AI Co-pilot Ready</h5>
+                <p>Ask me to create 3D models, scripts, environments, or manage your projects!</p>
+            </div>
+        `;
+        
+        // Generate new session ID
+        chatSessionId = 'chat_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        
+        if (typeof feather !== 'undefined') {
+            feather.replace();
+        }
+    }
+}
+
+function toggleProjectContext() {
+    // Load projects and show modal
+    fetch('/api/projects')
+        .then(response => response.json())
+        .then(projects => {
+            const projectList = document.getElementById('projectList');
+            
+            if (projects.length === 0) {
+                projectList.innerHTML = `
+                    <div class="text-center py-3 text-muted">
+                        <i data-feather="folder-plus" class="mb-2"></i>
+                        <p>No projects found. Create your first project!</p>
+                        <button class="btn btn-primary btn-sm" onclick="sendQuickMessage('Create a new game project')">
+                            Create Project
+                        </button>
+                    </div>
+                `;
+            } else {
+                projectList.innerHTML = `
+                    <button class="list-group-item list-group-item-action ${!currentProjectId ? 'active' : ''}" 
+                            onclick="setProjectContext(null)">
+                        <i data-feather="globe" class="me-2"></i>
+                        No project context (Global)
+                    </button>
+                `;
+                
+                projects.forEach(project => {
+                    projectList.innerHTML += `
+                        <button class="list-group-item list-group-item-action ${currentProjectId === project.id ? 'active' : ''}" 
+                                onclick="setProjectContext(${project.id}, '${escapeHtml(project.name)}')">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <i data-feather="folder" class="me-2"></i>
+                                    <strong>${escapeHtml(project.name)}</strong>
+                                    <br>
+                                    <small class="text-muted">${escapeHtml(project.description || '')}</small>
+                                </div>
+                                <span class="badge bg-secondary">${project.project_type}</span>
+                            </div>
+                        </button>
+                    `;
+                });
+            }
+            
+            if (typeof feather !== 'undefined') {
+                feather.replace();
+            }
+            
+            // Show modal
+            const modal = new bootstrap.Modal(document.getElementById('projectContextModal'));
+            modal.show();
+        })
+        .catch(error => {
+            console.error('Error loading projects:', error);
+        });
+}
+
+function setProjectContext(projectId, projectName = null) {
+    currentProjectId = projectId;
+    
+    // Update UI to show context
+    const contextButton = document.querySelector('button[onclick="toggleProjectContext()"]');
+    if (projectId) {
+        contextButton.innerHTML = `<i data-feather="folder" class="me-1"></i>Project: ${projectName}`;
+        contextButton.className = 'btn btn-primary btn-sm';
+        addMessage('system', `Project context set to: ${projectName}`, 'info');
+    } else {
+        contextButton.innerHTML = '<i data-feather="folder" class="me-1"></i>Project Context';
+        contextButton.className = 'btn btn-outline-primary btn-sm';
+        addMessage('system', 'Project context cleared (Global mode)', 'info');
+    }
+    
+    if (typeof feather !== 'undefined') {
+        feather.replace();
+    }
+    
+    // Close modal
+    const modal = bootstrap.Modal.getInstance(document.getElementById('projectContextModal'));
+    modal.hide();
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', function(event) {
+    // Enter to send message (when input is focused)
+    if (event.key === 'Enter' && event.target.id === 'messageInput') {
+        event.preventDefault();
+        document.getElementById('chatForm').dispatchEvent(new Event('submit'));
+    }
+    
+    // Escape to clear input
+    if (event.key === 'Escape' && event.target.id === 'messageInput') {
+        event.target.value = '';
+    }
+});
+</script>
+{% endblock %}

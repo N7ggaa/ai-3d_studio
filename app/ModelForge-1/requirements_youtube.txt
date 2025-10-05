@@ -1,0 +1,15 @@
+# Core dependencies
+yt-dlp>=2023.3.4
+opencv-python>=4.7.0
+numpy>=1.24.0
+
+# For 3D model processing
+trimesh>=3.21.5
+pygltflib>=1.14.0
+
+# For image processing
+Pillow>=9.5.0
+imageio>=2.28.0
+
+# For progress bars
+tqdm>=4.65.0

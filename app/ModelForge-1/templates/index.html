@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+
+{% block title %}AI 3D Model Generator - Home{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <!-- Hero Section -->
+        <div class="text-center mb-5">
+            <div class="mb-4">
+                <i data-feather="box" style="width: 64px; height: 64px;" class="text-primary"></i>
+            </div>
+            <h1 class="display-4 fw-bold mb-3">AI-Powered 3D Model Generator</h1>
+            <p class="lead text-muted mb-4">
+                Transform your ideas into 3D models using advanced AI technology. 
+                Generate, refine, and export in multiple formats with our Studio app.
+            </p>
+            <div class="d-flex justify-content-center gap-3 mb-4">
+                <a href="{{ url_for('studio') }}" class="btn btn-primary btn-lg">
+                    <i data-feather="cpu" class="me-2"></i>Try Studio
+                </a>
+                <a href="{{ url_for('download_page') }}" class="btn btn-outline-primary btn-lg">
+                    <i data-feather="download" class="me-2"></i>Download App
+                </a>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i data-feather="type" style="width: 48px; height: 48px;" class="text-info"></i>
+                        </div>
+                        <h5 class="card-title">Text to 3D</h5>
+                        <p class="card-text">
+                            Describe your 3D model in natural language and watch AI bring it to life.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i data-feather="image" style="width: 48px; height: 48px;" class="text-success"></i>
+                        </div>
+                        <h5 class="card-title">Image Reference</h5>
+                        <p class="card-text">
+                            Upload reference images to guide the 3D model generation process.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i data-feather="download" style="width: 48px; height: 48px;" class="text-warning"></i>
+                        </div>
+                        <h5 class="card-title">Multiple Formats</h5>
+                        <p class="card-text">
+                            Export to OBJ, GLB, STL, PLY, and more. Refine and optimize your models.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Features -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i data-feather="layers" style="width: 48px; height: 48px;" class="text-success"></i>
+                        </div>
+                        <h5 class="card-title">LOD Export</h5>
+                        <p class="card-text">
+                            Generate low, medium, and high detail versions for performance optimization.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i data-feather="cpu" style="width: 48px; height: 48px;" class="text-primary"></i>
+                        </div>
+                        <h5 class="card-title">Colab GPU</h5>
+                        <p class="card-text">
+                            Use free Google Colab GPU for heavy tasks like high-detail generation.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i data-feather="tool" style="width: 48px; height: 48px;" class="text-secondary"></i>
+                        </div>
+                        <h5 class="card-title">Mesh Repair</h5>
+                        <p class="card-text">
+                            Fix meshes with welding, normal recalculation, and hole filling.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works -->
+        <div class="card mb-5">
+            <div class="card-header">
+                <h3 class="card-title mb-0">
+                    <i data-feather="info" class="me-2"></i>
+                    How It Works
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row g-4">
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                <span class="text-white fw-bold">1</span>
+                            </div>
+                            <h6 class="mt-3">Describe</h6>
+                            <small class="text-muted">Enter a text prompt describing your desired 3D model</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <div class="rounded-circle bg-info d-inline-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                <span class="text-white fw-bold">2</span>
+                            </div>
+                            <h6 class="mt-3">Upload</h6>
+                            <small class="text-muted">Optionally upload reference images for better results</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <div class="rounded-circle bg-success d-inline-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                <span class="text-white fw-bold">3</span>
+                            </div>
+                            <h6 class="mt-3">Generate</h6>
+                            <small class="text-muted">AI processes your input and creates a 3D model</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <div class="rounded-circle bg-warning d-inline-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                <span class="text-white fw-bold">4</span>
+                            </div>
+                            <h6 class="mt-3">Download</h6>
+                            <small class="text-muted">Get your model in .fbx and .blend formats</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Example Prompts -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title mb-0">
+                    <i data-feather="help-circle" class="me-2"></i>
+                    Example Prompts
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="example-prompt p-3 border rounded">
+                            <strong>"A futuristic spaceship with sleek curves"</strong>
+                            <p class="text-muted small mb-0">Perfect for sci-fi scenes and games</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="example-prompt p-3 border rounded">
+                            <strong>"A medieval castle tower with weathered stones"</strong>
+                            <p class="text-muted small mb-0">Great for fantasy environments</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="example-prompt p-3 border rounded">
+                            <strong>"A modern office chair, ergonomic design"</strong>
+                            <p class="text-muted small mb-0">Ideal for architectural visualization</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="example-prompt p-3 border rounded">
+                            <strong>"A vintage car from the 1950s, red color"</strong>
+                            <p class="text-muted small mb-0">Classic vehicle for 3D scenes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

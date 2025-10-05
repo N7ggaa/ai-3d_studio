@@ -1,0 +1,42 @@
+{
+  "name": "ai-game-studio",
+  "version": "1.0.0",
+  "description": "AI-Powered 3D Model Generator",
+  "author": "ModelForge Team",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "dist": "electron-builder --publish=never"
+  },
+  "build": {
+    "appId": "com.aigamestudio.app",
+    "productName": "AI Game Studio",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*",
+      "!**/node_modules/*",
+      "!**/*.md"
+    ],
+    "win": {
+        "target": [
+          "nsis"
+        ],
+        "icon": "assets/icon.ico"
+      },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon.icns"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "assets/icon.png"
+    }
+  },
+  "devDependencies": {
+    "electron": "^25.0.0",
+    "electron-builder": "^24.0.0"
+  }
+}
