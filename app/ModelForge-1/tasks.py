@@ -8,8 +8,8 @@ from app import db
 from models import GenerationJob, Project, AssetCache
 from model_generator import generate_3d_model
 from file_converter import convert_to_fbx, convert_to_blend
-from ai_modules.script_generator import generate_lua_script
-from ai_modules.environment_generator import generate_environment
+from instance.ai_modules.script_generator import generate_lua_script
+from instance.ai_modules.environment_generator import generate_environment
 
 def generate_3d_model_task(job_id, prompt, reference_image_path=None, project_id=None):
     """

@@ -18,10 +18,10 @@ from enum import Enum
 import math
 
 # Import geometry generator
-from ai_modules.geometry_generator import create_geometry_generator, GeometryConfig, GeometryEngine
+from instance.ai_modules.geometry_generator import create_geometry_generator, GeometryConfig, GeometryEngine
 
 # Import texture generator
-from ai_modules.texture_generator import create_texture_generator, TextureConfig, TextureEngine
+from instance.ai_modules.texture_generator import create_texture_generator, TextureConfig, TextureEngine
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)

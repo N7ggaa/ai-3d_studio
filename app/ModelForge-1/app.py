@@ -1,7 +1,7 @@
 import os
 import logging
 from flask import Flask
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import declarative_base
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 # Configure logging
@@ -14,8 +14,7 @@ logging.basicConfig(
     ]
 )
 
-class Base(DeclarativeBase):
-    pass
+Base = declarative_base()
 
 # Create the app
 app = Flask(__name__)
