@@ -34,8 +34,9 @@ npm-debug.log*
 .DS_Store
 Thumbs.db
 
-# Documentation
+# Documentation (but keep essential files)
 *.md
+!README.md
 docs/
 
 # Logs
