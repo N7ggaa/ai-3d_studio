@@ -86,16 +86,18 @@
         }
 
         .logo-icon {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             background: var(--primary-gradient);
-            border-radius: 8px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
             color: white;
-            font-size: 18px;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
         }
 
         .nav-links {
@@ -384,75 +386,6 @@
             top: 8px;
         }
 
-        /* Screenshots Section */
-        .screenshots-section {
-            padding: 120px 0;
-        }
-
-        .screenshots-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 60px;
-        }
-
-        .screenshot-card {
-            background: var(--glass-bg);
-            border-radius: 16px;
-            overflow: hidden;
-            border: 1px solid var(--glass-border);
-            transition: all 0.3s ease;
-        }
-
-        .screenshot-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }
-
-        .screenshot-image {
-            width: 100%;
-            height: 200px;
-            background: var(--glass-bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .screenshot-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        .screenshot-card:hover .screenshot-image img {
-            transform: scale(1.05);
-        }
-
-        .screenshot-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(transparent, rgba(0,0,0,0.8));
-            padding: 20px;
-            color: white;
-        }
-
-        .screenshot-title {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .screenshot-description {
-            font-size: 0.8rem;
-            opacity: 0.8;
-        }
         .footer {
             background: rgba(0,0,0,0.3);
             padding: 60px 0;
@@ -720,9 +653,6 @@
                 font-size: 2.2rem;
             }
 
-            .screenshots-grid {
-                grid-template-columns: 1fr;
-            }
 
             .download-grid {
                 grid-template-columns: 1fr;
@@ -751,7 +681,6 @@
             }
 
             .features-section,
-            .screenshots-section,
             .download-section,
             .requirements-section {
                 padding: 80px 0;
@@ -824,9 +753,8 @@
                 </div>
                 <ul class="nav-links">
                     <li><a href="#features">Features</a></li>
-                    <li><a href="#screenshots">Screenshots</a></li>
                     <li><a href="#download">Download</a></li>
-                    <li><a href="#docs">Documentation</a></li>
+                    <li><a href="#requirements">Requirements</a></li>
                 </ul>
             </nav>
         </div>
@@ -859,10 +787,6 @@
                         <a href="#download" class="btn btn-primary">
                             <i data-feather="download"></i>
                             Download Now
-                        </a>
-                        <a href="#features" class="btn btn-secondary">
-                            <i data-feather="play"></i>
-                            Watch Demo
                         </a>
                         <a href="https://github.com/modelforge" class="btn btn-outline" target="_blank">
                             <i data-feather="github"></i>
@@ -967,45 +891,6 @@
             </div>
         </section>
 
-        <!-- Screenshots Section -->
-        <section id="screenshots" class="screenshots-section">
-            <div class="container">
-                <h2 class="section-title">See It In Action</h2>
-                <p class="section-subtitle">Real examples of 3D models created with ModelForge</p>
-
-                <div class="screenshots-grid">
-                    <div class="screenshot-card">
-                        <div class="screenshot-image">
-                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23334155'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23D1D5DB' font-family='Arial' font-size='16'%3EModelForge Interface%3C/text%3E%3C/svg%3E" alt="ModelForge Interface" loading="lazy">
-                            <div class="screenshot-overlay">
-                                <div class="screenshot-title">Main Interface</div>
-                                <div class="screenshot-description">Clean, intuitive design for effortless 3D creation</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="screenshot-card">
-                        <div class="screenshot-image">
-                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23334155'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23D1D5DB' font-family='Arial' font-size='16'%3EText-to-3D Generation%3C/text%3E%3C/svg%3E" alt="Text to 3D Generation" loading="lazy">
-                            <div class="screenshot-overlay">
-                                <div class="screenshot-title">Text-to-3D</div>
-                                <div class="screenshot-description">Transform words into detailed 3D models</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="screenshot-card">
-                        <div class="screenshot-image">
-                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23334155'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23D1D5DB' font-family='Arial' font-size='16'%3ERoblox Integration%3C/text%3E%3C/svg%3E" alt="Roblox Integration" loading="lazy">
-                            <div class="screenshot-overlay">
-                                <div class="screenshot-title">Roblox Export</div>
-                                <div class="screenshot-description">Direct integration with Roblox Studio</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- Download Section -->
         <section id="download" class="download-section">
@@ -1020,7 +905,7 @@
                         <p class="download-description">
                             Full-featured desktop app with advanced AI capabilities and local processing for maximum privacy.
                         </p>
-                        <a href="#" class="download-btn">Download for Windows</a>
+                        <a href="https://github.com/modelforge/desktop/releases/latest/download/ModelForge-Setup-Windows.exe" class="download-btn">Download for Windows</a>
                         <div class="download-meta">Version 1.0.0 • 156 MB</div>
                     </div>
 
@@ -1030,7 +915,7 @@
                         <p class="download-description">
                             Access ModelForge directly in your browser. No installation required, works on any device.
                         </p>
-                        <a href="#" class="download-btn">Launch Web App</a>
+                        <a href="https://github.com/modelforge/web-app" class="download-btn">Launch Web App</a>
                         <div class="download-meta">Always up-to-date • Cloud processing</div>
                     </div>
 
@@ -1075,7 +960,7 @@
                     <div class="requirement-item">
                         <div class="requirement-icon">🎮</div>
                         <div class="requirement-title">Graphics</div>
-                        <div class="requirement-value">OpenGL 3.3+ compatible GPU</div>
+                        <div class="requirement-value">OpenGL 3.3+ compatible GPU<br><small style="color: #4CAF50;">⚡ Runs significantly better with dedicated GPU</small></div>
                     </div>
                 </div>
             </div>
@@ -1091,7 +976,7 @@
                     <a href="#features">Features</a>
                     <a href="#download">Download</a>
                     <a href="#requirements">Requirements</a>
-                    <a href="#screenshots">Screenshots</a>
+                    <a href="https://github.com/modelforge/ModelForge/releases" target="_blank">Releases</a>
                 </div>
                 <div class="footer-section">
                     <h3>Documentation</h3>
@@ -1103,8 +988,8 @@
                 <div class="footer-section">
                     <h3>Community</h3>
                     <a href="https://github.com/modelforge" target="_blank">GitHub</a>
-                    <a href="https://discord.gg/modelforge" target="_blank">Discord</a>
-                    <a href="https://twitter.com/modelforge" target="_blank">Twitter</a>
+                    <a href="https://discord.gg/svwG6T8RvK" target="_blank">Discord</a>
+                    <a href="https://www.tiktok.com/@obsidian.industri?_t=ZS-90HzgoKwEuO&_r=1" target="_blank">TikTok</a>
                     <a href="https://youtube.com/modelforge" target="_blank">YouTube</a>
                 </div>
                 <div class="footer-section">
@@ -1120,11 +1005,11 @@
                 <a href="https://github.com/modelforge" target="_blank" title="GitHub">
                     <i data-feather="github"></i>
                 </a>
-                <a href="https://twitter.com/modelforge" target="_blank" title="Twitter">
-                    <i data-feather="twitter"></i>
-                </a>
-                <a href="https://discord.gg/modelforge" target="_blank" title="Discord">
+                <a href="https://discord.gg/svwG6T8RvK" target="_blank" title="Discord">
                     <i data-feather="message-circle"></i>
+                </a>
+                <a href="https://www.tiktok.com/@obsidian.industri?_t=ZS-90HzgoKwEuO&_r=1" target="_blank" title="TikTok">
+                    <i data-feather="play"></i>
                 </a>
                 <a href="https://youtube.com/modelforge" target="_blank" title="YouTube">
                     <i data-feather="youtube"></i>
@@ -1176,7 +1061,7 @@
             }, observerOptions);
 
             // Observe all feature cards and other animated elements
-            document.querySelectorAll('.feature-card, .screenshot-card, .download-card').forEach(el => {
+            document.querySelectorAll('.feature-card, .download-card').forEach(el => {
                 observer.observe(el);
             });
 
@@ -1191,12 +1076,12 @@
 
             // Download functionality
             window.downloadApp = function(platform) {
-                // In a real implementation, these would point to actual download URLs
+                // Real download URLs
                 const downloads = {
                     'windows': 'https://github.com/modelforge/desktop/releases/latest/download/ModelForge-Setup-Windows.exe',
                     'macos': 'https://github.com/modelforge/desktop/releases/latest/download/ModelForge-macOS.dmg',
                     'linux': 'https://github.com/modelforge/desktop/releases/latest/download/ModelForge-Linux.AppImage',
-                    'web': '/app'
+                    'web': 'https://github.com/modelforge/web-app'
                 };
 
                 if (downloads[platform]) {

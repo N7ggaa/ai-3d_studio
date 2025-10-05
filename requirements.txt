@@ -1,0 +1,5 @@
+flask==2.0.1
+pillow==9.5.0
+torch
+transformers
+werkzeug==2.0.1
