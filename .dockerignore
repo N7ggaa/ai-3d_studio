@@ -21,6 +21,8 @@ coverage.xml
 *.log
 .venv
 venv/
+env/
+ENV/
 
 # Node.js (if any)
 node_modules
@@ -29,10 +31,14 @@ npm-debug.log*
 # IDE
 .vscode
 .idea
+*.swp
+*.swo
+*~
 
 # OS
 .DS_Store
 Thumbs.db
+desktop.ini
 
 # Documentation (but keep essential files)
 *.md
@@ -41,15 +47,39 @@ docs/
 
 # Logs
 *.log
+logs/
 
 # Temporary files
 *.tmp
 *.temp
+.tmp/
+temp/
 
 # Build artifacts
 dist/
 build/
+*.egg-info/
 
 # Docker
-Dockerfile
+Dockerfile.*
 .dockerignore
+
+# Test files and cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Archive and backup files
+*.zip
+*.tar.gz
+*.rar
+archive/
+
+# Local development files
+.env
+.env.local
+.env.*.local
+
+# Model and data files (if not needed for container)
+*.obj
+*.db

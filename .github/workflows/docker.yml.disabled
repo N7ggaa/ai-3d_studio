@@ -26,9 +26,12 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v5
       with:
-        context: .
-        file: ./Dockerfile
-        push: true
-        tags: |
-          ghcr.io/${{ github.repository_owner }}/ai-3d_studio:latest
-          ghcr.io/${{ github.repository_owner }}/ai-3d_studio:${{ github.sha }}
+         context: .
+         file: ./Dockerfile
+         push: true
+         cache-from: type=gha
+         cache-to: type=gha,mode=max
+         tags: |
+           ghcr.io/${{ github.repository_owner }}/ai-3d-studio:latest
+           ghcr.io/${{ github.repository_owner }}/ai-3d-studio:${{ github.sha }}
+         platforms: linux/amd64
