@@ -19,14 +19,6 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies
-        working-directory: industries-web
-        run: npm ci
-
-      - name: Build site
-        working-directory: industries-web
-        run: npm run build
-
       - name: Deploy to Netlify
         uses: netlify/actions/cli@master
         with:
