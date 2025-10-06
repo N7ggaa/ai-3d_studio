@@ -8,6 +8,9 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
     steps:
     - name: Checkout code
@@ -26,4 +29,6 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ghcr.io/n7ggaa/ai-3d_studio:latest
+        tags: |
+          ghcr.io/${{ github.repository_owner }}/ai-3d_studio:latest
+          ghcr.io/${{ github.repository_owner }}/ai-3d_studio:${{ github.sha }}
