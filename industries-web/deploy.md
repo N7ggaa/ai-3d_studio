@@ -23,16 +23,48 @@ netlify deploy --prod --dir .
 ```
 
 ### 3. GitHub Pages
-1. Go to your repository settings
-2. Scroll to "Pages" section
-3. Select "Deploy from a branch"
-4. Choose "main" branch and "/ (root)" folder
-5. Your site will be available at `https://yourusername.github.io/industries-web`
+GitHub Pages deployment is automated via GitHub Actions.
 
-### 4. Custom Domain Setup
-1. Add your domain to your hosting platform
-2. Update DNS records to point to your hosting provider
-3. Update the `index.html` file with your actual domain
+1. **Enable GitHub Pages**:
+   - Go to your repository settings
+   - Scroll to "Pages" section
+   - Select "GitHub Actions" as the source
+
+2. **Automatic Deployment**:
+   - The site deploys automatically when you push changes to the `industries-web/` folder on the `main` branch
+   - The workflow deploys the contents of `industries-web/` as the root of your site
+
+3. **Site URL**:
+   - Your site will be available at `https://yourusername.github.io/repository-name/`
+   - For this repository, it will be `https://N7ggaa.github.io/ai-3d_studio/`
+
+### 4. Free Subdomain Setup (username.github.io)
+The GitHub Pages URL serves as your free subdomain. No additional setup is required beyond enabling Pages as described above.
+
+- **Project Site**: `https://yourusername.github.io/repository-name/` (current setup)
+- **User/Organization Site**: To use `https://yourusername.github.io/` as root, create a new repository named `yourusername.github.io` and move the site files there.
+
+### 5. Custom Domain Setup
+1. **Add Custom Domain in GitHub**:
+   - Go to repository Settings → Pages
+   - In the "Custom domain" field, enter your domain (e.g., `www.yourdomain.com` or `yourdomain.com`)
+   - Click Save
+
+2. **Update DNS Records**:
+   - Go to your domain registrar's DNS settings
+   - Add a CNAME record pointing `www.yourdomain.com` to `yourusername.github.io`
+   - Or add an A record for the apex domain pointing to GitHub's IP addresses:
+     - 185.199.108.153
+     - 185.199.109.153
+     - 185.199.110.153
+     - 185.199.111.153
+
+3. **Enforce HTTPS**:
+   - GitHub Pages will automatically provision an SSL certificate
+   - Ensure "Enforce HTTPS" is checked in Pages settings
+
+4. **Update Site Content** (Optional):
+   - Update any hardcoded URLs in `index.html` if needed
 
 ## Local Development
 ```bash
